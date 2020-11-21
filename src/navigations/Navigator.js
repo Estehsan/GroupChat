@@ -8,6 +8,8 @@ import Chat from '../screens/Chat';
 import Icon from '@expo/vector-icons/Ionicons';
 import Icon2 from '@expo/vector-icons/Entypo';
 import AddGroup from '../screens/Sub/AddGroup';
+import Login from '../screens/login';
+import SignUp from '../screens/signup';
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
@@ -65,7 +67,10 @@ const screenOptionStyle = {
 
 const ChatStackNavigator = () => {
     return(
+        
         <Stack.Navigator screenOptions={screenOptionStyle}>
+            <Stack.Screen name='Login' component={Login} />
+            <Stack.Screen name='SignUp' component={SignUp} />
             <Stack.Screen name='Chat' component={BottomTabNavigator}/>
            <Stack.Screen name='Discussion' component={Discussion}/>
            <Stack.Screen name='AddGroup' component={AddGroup}/>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text,View,Image, StyleSheet,TextInput, SafeAreaView, ScrollView, KeyboardAvoidingView } from "react-native";
+import { Text,View,Image, Platform, StyleSheet,TextInput, SafeAreaView, ScrollView, KeyboardAvoidingView } from "react-native";
 import { AntDesign,Ionicons } from '@expo/vector-icons';
 
 import { LinearGradient } from "expo-linear-gradient";
