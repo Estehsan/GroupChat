@@ -12,9 +12,10 @@ import Login from '../screens/login';
 import SignUp from '../screens/signup';
 
 const Tab = createBottomTabNavigator();
-const BottomTabNavigator = () => {
+const BottomTabNavigator = ({routes}) => {
     return (
-        <Tab.Navigator 
+        <Tab.Navigator
+            screenOptions={routes}
             tabBarOptions={{
                 activeTintColor:'#f2404c',
                 inactiveTintColor:'#000119',
@@ -31,6 +32,7 @@ const BottomTabNavigator = () => {
                     name='Home'
                     component={Home}
                     options={{
+                        
                         tabBarLabel:'',
                         tabBarIcon:({color,size})=>(
                             <Icon name='ios-compass' color={color} size={30}/>
@@ -41,6 +43,7 @@ const BottomTabNavigator = () => {
                     name='Chat'
                     component={Chat}
                     options={{
+                        screenOptions:{routes},
                         tabBarLabel:'',
                         tabBarIcon:({color,size})=>(
                             <Icon2 name='chat' color={color} size={30}/>
@@ -69,9 +72,12 @@ const ChatStackNavigator = () => {
     return(
         
         <Stack.Navigator screenOptions={screenOptionStyle}>
-            <Stack.Screen name='Login' component={Login} />
+
             <Stack.Screen name='SignUp' component={SignUp} />
-            <Stack.Screen name='Chat' component={BottomTabNavigator}/>
+            <Stack.Screen name='Login' component={Login} />
+            <Stack.Screen name='Chats' component={Chat}/>
+            <Stack.Screen name='Tabs' component={BottomTabNavigator}/>
+
            <Stack.Screen name='Discussion' component={Discussion}/>
            <Stack.Screen name='AddGroup' component={AddGroup}/>
 

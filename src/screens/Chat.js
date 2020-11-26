@@ -15,11 +15,15 @@ import Profiles from '../components/Profiles';
 import Messages from '../components/Messages';
 import { AntDesign } from '@expo/vector-icons';
 import AddGroup from './Sub/AddGroup';
-const Chat = (props) => {
+
+
+
+export default function Chat (props) {
     const URL = `https://api.github.com/users`;
     const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true)
-    
+    const [loading, setLoading] = useState(true);
+    const [ID,setID] = useState();
+    console.log(ID);
     const pan = useRef(new Animated.ValueXY()).current;
     const list = useRef(new Animated.ValueXY()).current;
 
@@ -107,7 +111,7 @@ const Chat = (props) => {
                                                 count={Math.floor(Math.random() * 3)}
                                                 onPress={()=>{
                                                     props.navigation.navigate('Discussion',{
-                                                        itemId:item.id,
+                                                        itemId:ID,
                                                         itemName:item.login,
                                                         itemPic:item.avatar_url
                                                     });
@@ -121,7 +125,7 @@ const Chat = (props) => {
        </LinearGradient>
     )
 }
-export default Chat;
+
 
 const styles = StyleSheet.create({
     list:{

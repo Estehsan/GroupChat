@@ -13,12 +13,13 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "../database/firebase";
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState();
-  const [password, setPass] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPass] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
 
@@ -27,18 +28,19 @@ export default function Login({ navigation }) {
       Alert.alert("Enter details to signin!");
     } else {
       setLoading(true);
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-        .then((res) => {
-          console.log(res);
-          console.log("User logged-in successfully!");
-          setLoading(false);
-          setEmail("");
-          setPass("");
-          navigation.navigate("Chat");
-        })
-        .catch((error) => Alert.alert(error.message));
+
+      firebase.database().ref('users/' + email).once('value').then((res)=>{
+          console.log(res.val().email);
+          if(res.val().password== password)
+            {
+              console.log("Inlogin: " + email);
+              navigation.navigate("Tabs",{Id:email});
+            }
+          else{
+            Alert.alert("Wrong Password");
+          }
+
+      }).catch((error) => Alert.alert(error.message));
     }
   };
   return (

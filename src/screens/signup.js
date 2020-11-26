@@ -17,21 +17,22 @@ export default function Signup({navigation}) {
       Alert.alert('Enter details to signup!')
     } else {
       setLoading(true);
-      firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((res) => {
-        res.user.updateProfile({
-          displayName: displayName
+      firebase.database()
+        .ref('/users/' + email)
+        .set({
+          Phone: email,
+          password: 40,
+          Name: 'Sayam',
         })
-        console.log('User registered successfully!')
-        setLoading(false);
-        setdisplay('');
-        setEmail('');
-        setPass('');
-        navigation.navigate('Login')
-      })
-      .catch(error => this.setState({ errorMessage: error.message }))      
+        .then(() => {
+          console.log('Data set.');
+          setLoading(false);
+          setdisplay('');
+          setEmail('');
+          setPass('');
+          navigation.navigate('Login');
+        })
+        .catch(error => console.log(error.message));   
     }
   }
    

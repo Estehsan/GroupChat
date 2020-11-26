@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import {View,Text,Image,StyleSheet} from 'react-native';
+import React,{Children, useState, useEffect} from 'react';
+import {View,Text,Image,StyleSheet, Alert, FlatList} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from '@expo/vector-icons/AntDesign';
@@ -7,22 +7,60 @@ import LastWatch from '../components/LastWatch';
 import Received from '../components/Received';
 import Sent from '../components/Sent';
 import Data from '../dummy/Data.json';
-import Input from '../components/Input'; 
+import Input from '../components/Input';
+import firebase from '../database/firebase';
+
+
+
 
 const Discussion = ({ route, navigation }) => {
-    const { itemName , itemPic } = route.params;
-    const [inputMessage, setMessage] = useState('');
+    const { itemId, itemName , itemPic } = route.params;
     
-    const send = () => {
-        Data.push({id:inputMessage,message:inputMessage});
-        setMessage('');
-    };
+    const [inputMessage, setMessage] = useState('');
+    const[currentKey,setCurrentKey]=useState('0');
+    const [data,setdata] = useState([{t:'', key:'', flag:''},]);
+    useEffect(()=>{
+        setdata([{t:'', key:'', flag:''},]);
+        firebase.database().ref('Chats/').orderByChild('SentAt').on('value',function(snapshot) {
+            snapshot.forEach(function(value) {
+            var x = value.child('Text').val();
+            console.log("x: " + x);
+            setCurrentKey((parseInt(currentKey)+parseInt(1)).toString());
+            setdata((prevState)=>{return[{t:x,key:currentKey},...prevState] });
+            }) 
+            
+        });
+        
+    },[send])
 
-    var txt = []
-    for (var i = 5; i < Data.length; i++){
-        txt.push(<Sent key={Data[i].id} message={Data[i].message}/>);
+    function LoadData(items)
+    {    console.log("Items: "+items.t);
+        {}
+    if(items.t!=''){
+    return(
+        <Received message= {items.t} image={itemPic} />
+
+        )}
     }
-    console.log(Data)
+const removeNote=(key)=>
+  {
+    setdata((currentTodo)=>{return currentTodo.filter(data=> data.key!=key);});
+  }
+    const send = () => {
+        setdata([{t:'', key:'', flag:''},]);
+        const date = new Date().toLocaleString();
+        firebase.database().ref('Chats/').push({
+            sentBy: '4321',
+            SentAt: date,
+            SentTo: '1234',
+            Text:inputMessage,
+          }).then(() => {
+            console.log('Message sent.');
+            setMessage('');
+          })
+          .catch(error => console.log(error.message));
+        
+    };
 
     return(
       <LinearGradient
@@ -40,30 +78,8 @@ const Discussion = ({ route, navigation }) => {
                     <Text style={styles.username}>{itemName}</Text>
                     <Image source={{uri:itemPic}} style={styles.avatar}/>
                 </View>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    <LastWatch  checkedOn='Yesterday'/>
-                    <Received 
-                        image={itemPic}
-                        message={Data[0].message}
-                    />
-                    <Sent
-                        message={Data[1].message}
-                    />
-                    <Received 
-                        image={itemPic}
-                        message={Data[2].message}
-                    />
-                     <Sent
-                        message={Data[3].message}
-                    />
-                    <LastWatch  checkedOn='Today'/>
-                    <Received 
-                        image={itemPic}
-                        message={Data[4].message}
-                    />
-                    <View>
-                        {txt}
-                    </View>
+                <ScrollView>
+                { data.map((items)=>{return(LoadData(items))})}
                 </ScrollView>
           </View>
           <Input
