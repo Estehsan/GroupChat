@@ -15,18 +15,19 @@ import Profiles from '../components/Profiles';
 import Messages from '../components/Messages';
 import { AntDesign } from '@expo/vector-icons';
 import AddGroup from './Sub/AddGroup';
-
+import { useSelector, useDispatch } from 'react-redux';
 
 
 export default function Chat (props) {
     const URL = `https://api.github.com/users`;
     const [data, setData] = useState([]);
+    const notes = useSelector(state => state);
     const [loading, setLoading] = useState(true);
-    const [ID,setID] = useState();
-    console.log(ID);
     const pan = useRef(new Animated.ValueXY()).current;
     const list = useRef(new Animated.ValueXY()).current;
-
+    const dispatch = useDispatch();
+    console.log("InCHat: " + notes[0].note);
+    const [ID,setID] = useState(notes[0].note);
     useEffect(function() {
         const getData = async () => {
             const resp = await fetch(URL);
@@ -34,6 +35,8 @@ export default function Chat (props) {
             setData(data);
             setLoading(false);
         };
+        console.log("Data: ");
+        console.log(data);
         getData();
 
         Animated.timing(pan, {

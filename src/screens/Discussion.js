@@ -1,4 +1,4 @@
-import React,{Children, useState, useEffect} from 'react';
+import React,{Children, useState, useEffect, useRef} from 'react';
 import {View,Text,Image,StyleSheet, Alert, FlatList} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -15,13 +15,12 @@ import firebase from '../database/firebase';
 
 const Discussion = ({ route, navigation }) => {
     const { itemId, itemName , itemPic } = route.params;
-    
     const [inputMessage, setMessage] = useState('');
     const[currentKey,setCurrentKey]=useState('0');
     const [data,setdata] = useState([{t:'', key:'', flag:''},]);
     useEffect(()=>{
         setdata([{t:'', key:'', flag:''},]);
-        firebase.database().ref('Chats/').orderByChild('SentAt').on('value',function(snapshot) {
+        firebase.database().ref('Chats/').on('value',function(snapshot) {
             snapshot.forEach(function(value) {
             var x = value.child('Text').val();
             console.log("x: " + x);
@@ -31,7 +30,7 @@ const Discussion = ({ route, navigation }) => {
             
         });
         
-    },[send])
+    },[])
 
     function LoadData(items)
     {    console.log("Items: "+items.t);
@@ -61,7 +60,7 @@ const removeNote=(key)=>
           .catch(error => console.log(error.message));
         
     };
-
+    const scrollViewRef = useRef();
     return(
       <LinearGradient
       
@@ -78,8 +77,9 @@ const removeNote=(key)=>
                     <Text style={styles.username}>{itemName}</Text>
                     <Image source={{uri:itemPic}} style={styles.avatar}/>
                 </View>
-                <ScrollView>
-                { data.map((items)=>{return(LoadData(items))})}
+                <ScrollView ref={scrollViewRef}
+      onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}>
+                { data.reverse().map((items)=>{return(LoadData(items))})}
                 </ScrollView>
           </View>
           <Input

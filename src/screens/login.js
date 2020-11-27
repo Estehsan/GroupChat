@@ -13,17 +13,24 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-
+import { useSelector, useDispatch } from 'react-redux';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebase from "../database/firebase";
+import {addnote} from './UserActions'
 
-export default function Login({ navigation }) {
+function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPass] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState();
+  const notes = useSelector(state => state);
 
+  const dispatch = useDispatch();
   const userLogin = () => {
+    
+  
+    dispatch(addnote(email));
+
     if (email === "" && password === "") {
       Alert.alert("Enter details to signin!");
     } else {
@@ -31,10 +38,14 @@ export default function Login({ navigation }) {
 
       firebase.database().ref('users/' + email).once('value').then((res)=>{
           console.log(res.val().email);
+
           if(res.val().password== password)
             {
               console.log("Inlogin: " + email);
-              navigation.navigate("Tabs",{Id:email});
+              
+              
+
+              navigation.navigate("Tabs");
             }
           else{
             Alert.alert("Wrong Password");
@@ -190,3 +201,7 @@ const styles = StyleSheet.create({
   header: { alignItems: "center", padding: 30 },
   btn: { borderRadius: 16,borderTopRightRadius:0, backgroundColor: "#0bcac7", height: 60 ,alignItems:"center",justifyContent:"center",marginTop:20},
 });
+
+
+
+export default (Login);

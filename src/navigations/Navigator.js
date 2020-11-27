@@ -1,6 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import Home from '../screens/Home';
 import Discussion from '../screens/Discussion';
 import Profile from '../screens/Profile';
@@ -10,6 +12,7 @@ import Icon2 from '@expo/vector-icons/Entypo';
 import AddGroup from '../screens/Sub/AddGroup';
 import Login from '../screens/login';
 import SignUp from '../screens/signup';
+import UserReducer from '../screens/UserReducer';
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = ({routes}) => {
@@ -67,10 +70,9 @@ const Stack = createStackNavigator();
 const screenOptionStyle = {
     headerShown:false
 };
-
 const ChatStackNavigator = () => {
     return(
-        
+        <Provider store={UserReducer}>
         <Stack.Navigator screenOptions={screenOptionStyle}>
 
             <Stack.Screen name='SignUp' component={SignUp} />
@@ -82,6 +84,7 @@ const ChatStackNavigator = () => {
            <Stack.Screen name='AddGroup' component={AddGroup}/>
 
         </Stack.Navigator>
+        </Provider>
     )
 }
 
