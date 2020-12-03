@@ -9,15 +9,17 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
-const Input = ({ inputMessage, onSendPress, setMessage }) => {
+const Input = ({ term, onSendPress, onTermChange,onValidateTextField }) => {
     return(
         <View style={styles.container}>
             <Entypo name='emoji-happy' color='#fff' size={20}/>
             <TextInput
                 placeholder='Some text'
-                value={inputMessage}
-                onChangeText={setMessage}
+                value={term}
+                onChangeText={onTermChange}
                 style={styles.input}
+                onEndEditing={onValidateTextField}
+
             />
             <TouchableOpacity onPress={onSendPress}>
                 <Ionicons name='ios-send' color='#FFF' size={20}/>

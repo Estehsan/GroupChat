@@ -20,6 +20,7 @@
     "expo-font": "~8.2.1",
     "expo-linear-gradient": "~8.2.1",
     "expo-status-bar": "^1.0.2",
+    "firebase": "^8.1.1",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-minimal-pie-chart": "^8.0.1",

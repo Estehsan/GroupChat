@@ -8,6 +8,8 @@ import Chat from '../screens/Chat';
 import Icon from '@expo/vector-icons/Ionicons';
 import Icon2 from '@expo/vector-icons/Entypo';
 import AddGroup from '../screens/Sub/AddGroup';
+import Login from '../screens/login';
+import SignUp from '../screens/signup';
 
 const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
@@ -25,7 +27,7 @@ const BottomTabNavigator = () => {
                 }
             }}
         >
-                <Tab.Screen
+                {/* <Tab.Screen
                     name='Home'
                     component={Home}
                     options={{
@@ -34,7 +36,7 @@ const BottomTabNavigator = () => {
                             <Icon name='ios-compass' color={color} size={30}/>
                         )
                     }}
-                />
+                /> */}
                  <Tab.Screen
                     name='Chat'
                     component={Chat}
@@ -64,10 +66,15 @@ const screenOptionStyle = {
 };
 
 const ChatStackNavigator = () => {
+    
     return(
+        
         <Stack.Navigator screenOptions={screenOptionStyle}>
-            <Stack.Screen name='Chat' component={BottomTabNavigator}/>
+        <Stack.Screen name='Login' component={Login} />
+            <Stack.Screen name='SignUp' component={SignUp} />
            <Stack.Screen name='Discussion' component={Discussion}/>
+           <Stack.Screen name='Chat' component={BottomTabNavigator}/>
+
            <Stack.Screen name='AddGroup' component={AddGroup}/>
 
         </Stack.Navigator>
